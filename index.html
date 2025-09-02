@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Survey Cepat Cilok Chili Oil</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 30px;
+      }
+      h2 {
+        margin-bottom: 20px;
+      }
+      .rating {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+      button {
+        width: 56px;
+        height: 56px;
+        border: none;
+        border-radius: 50%;
+        background: #eee;
+        cursor: pointer;
+        font-size: 18px;
+        transition: 0.15s;
+      }
+      button:hover {
+        background: #ddd;
+      }
+      button:active {
+        background: #d9534f;
+        color: #fff;
+        transform: scale(0.95);
+      }
+      #result {
+        margin-top: 12px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Survey Cepat 🍡 Cilok Chili Oil</h2>
+    <p>Pilih nilai 1–10 (langsung tersimpan)</p>
+
+    <div class="rating" id="rating"></div>
+    <div id="result">Menunggu input…</div>
+
+    <script>
+      const WEB_APP_URL =
+        "https://script.google.com/macros/s/AKfycbwP3pjRIi3vqC3NS_69liTabk1Ifer7jV-Ld-t5Ci7MlW67HXbc44hn7nIl-PEFdVHXUQ/exec"; // <-- ganti dengan URL Apps Script /exec
+      const ratingDiv = document.getElementById("rating");
+      const result = document.getElementById("result");
+
+      for (let i = 1; i <= 10; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        btn.onclick = () => {
+          result.textContent = `Mencatat: ${i}…`;
+          fetch(WEB_APP_URL, {
+            method: "POST",
+            mode: "cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ rating: i }),
+          })
+            .then((r) => r.text())
+            .then(() => {
+              result.textContent = `✅ Tersimpan: ${i}`;
+              setTimeout(() => {
+                result.textContent = "Menunggu input…";
+              }, 800);
+            })
+            .catch(() => {
+              result.textContent =
+                "⚠️ Gagal simpan, cek koneksi/akses web app.";
+            });
+        };
+        ratingDiv.appendChild(btn);
+      }
+    </script>
+  </body>
+</html>
