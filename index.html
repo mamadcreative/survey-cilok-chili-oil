@@ -53,7 +53,7 @@
 
     <script>
       const WEB_APP_URL =
-        "https://script.google.com/macros/s/AKfycbwP3pjRIi3vqC3NS_69liTabk1Ifer7jV-Ld-t5Ci7MlW67HXbc44hn7nIl-PEFdVHXUQ/exec";
+        "https://script.google.com/macros/s/AKfycbwP3pjRIi3vqC3NS_69liTabk1Ifer7jV-Ld-t5Ci7MlW67HXbc44hn7nIl-PEFdVHXUQ/exec"; // ganti dengan URL Web App hasil deploy
       const ratingDiv = document.getElementById("rating");
       const result = document.getElementById("result");
 
@@ -62,23 +62,26 @@
         btn.textContent = i;
         btn.onclick = () => {
           result.textContent = `Mencatat: ${i}…`;
+
           const formData = new FormData();
           formData.append("rating", i);
 
           fetch(WEB_APP_URL, {
             method: "POST",
-            mode: "no-cors",
             body: formData,
           })
-            .then(() => {
+            .then((res) => res.text())
+            .then((text) => {
+              console.log("Response:", text); // debug
               result.textContent = `✅ Tersimpan: ${i}`;
               setTimeout(() => {
                 result.textContent = "Menunggu input…";
               }, 800);
             })
-            .catch(() => {
+            .catch((err) => {
+              console.error("Error:", err);
               result.textContent =
-                "⚠️ Gagal simpan, cek koneksi/akses web app.";
+                "⚠️ Gagal simpan, cek koneksi/akses Web App.";
             });
         };
         ratingDiv.appendChild(btn);
